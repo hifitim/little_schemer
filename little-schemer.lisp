@@ -70,13 +70,13 @@
 (defun pick (n lat)
   "Returns the nth element of lat."
   (cond
-    ((zerop (sub1 n)) (car lat))
+    ((one? n) (car lat))
     ((pick (sub1 n) (cdr lat)))))
 
 (defun rempick (n lat)
   "Removes the nth element from lat."
   (cond
-    ((zerop (sub1 n)) (cdr lat))
+    ((one? n) (cdr lat))
     ((cons (car lat) (rempick (sub1 n) (cdr lat))))))
 
 (defun nonums (lat)
@@ -104,3 +104,28 @@
      nil)
     ((eq a1 a2))))
      
+(defun occur (a lat)
+  "Returns the number of times that a occurs in lat."
+  (cond
+    ((null lat) 0)
+    ((eqan (car lat) a)
+     (add1 (occur a (cdr lat))))
+    ((occur a (cdr lat)))))
+  
+(defun one? (a)
+  "Returns t is one."
+  (eqan 1 a))
+
+(defun rember* (a lat)
+  "Removes every occurance of a from lat."
+  (cond
+    ((null lat) nil)
+    ((atom? (car lat))
+     (cond
+       ((eqan (car lat) a)
+	(rember* a (cdr lat)))
+       ((cons (car lat) (rember* a (cdr lat))))))
+    ((cons (rember* a (car lat)) (rember* a (cdr lat))))))
+
+(defun atom? (a)
+  (not (listp a)))
