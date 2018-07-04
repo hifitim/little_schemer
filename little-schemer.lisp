@@ -166,9 +166,21 @@
     ((atom? (car lat))
      (cond
        ((eqan (car lat) a)
-	(format t "found it!~%")
 	(add1 (occur* a (cdr lat))))
        ((occur* a (cdr lat)))))
     (t
      (+ (occur* a (car lat))
 	(occur* a (cdr lat))))))
+
+(defun subst* (new old lat)
+  "Replaces old with new lat."
+  (cond
+    ((null lat) nil)
+    ((atom? (car lat))
+     (cond
+       ((eqan (car lat) old)
+	(cons new (subst* new old (cdr lat))))
+       (t
+	(cons (car lat) (subst* new old (cdr lat))))))
+    (t
+     (cons (subst* new old (car lat)) (subst* new old (cdr lat))))))
