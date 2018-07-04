@@ -72,3 +72,35 @@
   (cond
     ((zerop (sub1 n)) (car lat))
     ((pick (sub1 n) (cdr lat)))))
+
+(defun rempick (n lat)
+  "Removes the nth element from lat."
+  (cond
+    ((zerop (sub1 n)) (cdr lat))
+    ((cons (car lat) (rempick (sub1 n) (cdr lat))))))
+
+(defun nonums (lat)
+  "Removes all the numbers from lat."
+  (cond
+    ((null lat) nil)
+    ((numberp (car lat))
+     (nonums (cdr lat)))
+    ((cons (car lat) (nonums (cdr lat))))))
+
+(defun allnums (lat)
+  "Returns a tup of the numbers in lat."
+  (cond
+    ((null lat) nil)
+    ((numberp (car lat))
+     (cons (car lat) (allnums (cdr lat))))
+    ((allnums (cdr lat)))))
+
+(defun eqan (a1 a2)
+  "Determines if a1 and a2 are equal."
+  (cond
+    ((and (numberp a1) (numberp a2))
+     (my= a1 a2))
+    ((or (numberp a1) (numberp a2))
+     nil)
+    ((eq a1 a2))))
+     
