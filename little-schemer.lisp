@@ -135,28 +135,40 @@
 (defun insertR* (new old lat)
   "Inserts new to the right each occurance of old in lat."
   (cond
-    ((null lat)
-     (format t "null!~%")
-     nil)
-    ((atom? (car lat))
-     (format t "atom! ~A~%" (car lat))
+    ((null lat) nil)
+    ((atom? (car lat))     
      (cond
-       ((eqan (car lat) old)
-	(format t "found new in ~A!~%" lat)
+       ((eqan (car lat) old)	
 	(cons old (cons new (insertR* new old (cdr lat)))))
        (t
 	(cons (car lat) (insertR* new old (cdr lat))))))
-    (t
-     (format t "new lat found: ~A~%" lat)
+    (t     
      (cons (insertR* new old (car lat)) (insertR* new old (cdr lat))))))
     
-       
+(defun insertL* (new old lat)
+  "Inserts new to the right each occurance of old in lat."
+  (cond
+    ((null lat) nil)
+    ((atom? (car lat))     
+     (cond
+       ((eqan (car lat) old)	
+	(cons new (cons old (insertL* new old (cdr lat)))))
+       (t
+	(cons (car lat) (insertL* new old (cdr lat))))))
+    (t     
+     (cons (insertL* new old (car lat)) (insertL* new old (cdr lat))))))
 
 
-
-
-
-
-
-
-
+(defun occur* (a lat)
+  "Counts occurences of a in lat."
+  (cond
+    ((null lat) 0)
+    ((atom? (car lat))
+     (cond
+       ((eqan (car lat) a)
+	(format t "found it!~%")
+	(add1 (occur* a (cdr lat))))
+       ((occur* a (cdr lat)))))
+    (t
+     (+ (occur* a (car lat))
+	(occur* a (cdr lat))))))
