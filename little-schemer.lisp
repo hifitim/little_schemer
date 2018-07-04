@@ -1,5 +1,21 @@
 (declaim (optimize #+sbcl (sb-c::merge-tail-calls 3) #+sbcl (sb-c::insert-debug-catch 0))) 
 
+;; Utility functions
+(defun sub1 (n)
+  "Decrements n by 1."
+  (- n 1))
+
+(defun add1 (n)
+  "Increments n by 1."
+  (+ n 1))
+
+(defun one? (a)
+  "Returns t is one."
+  (eqan 1 a))
+
+(defun atom? (a)
+  (not (listp a)))
+
 ;; Number games
 (defun addtup (tup)
   "Sums a tuple."
@@ -13,9 +29,6 @@
     ((zerop m) 0)
     ((+ n (x n (sub1 m))))))
 
-(defun sub1 (n)
-  "Decrements n by 1."
-  (- n 1))
 
 (defun tup+ (tup1 tup2)
   "Adds two tuples together."
@@ -50,10 +63,6 @@
   (cond
     ((zerop m) 1)
     ((x n (pow n (sub1 m))))))
-
-(defun add1 (n)
-  "Increments n by 1."
-  (+ n 1))
 
 (defun quot (n m)
   "Recursive division of n by m."
@@ -111,10 +120,6 @@
     ((eqan (car lat) a)
      (add1 (occur a (cdr lat))))
     ((occur a (cdr lat)))))
-  
-(defun one? (a)
-  "Returns t is one."
-  (eqan 1 a))
 
 (defun rember* (a lat)
   "Removes every occurance of a from lat."
@@ -127,5 +132,31 @@
        ((cons (car lat) (rember* a (cdr lat))))))
     ((cons (rember* a (car lat)) (rember* a (cdr lat))))))
 
-(defun atom? (a)
-  (not (listp a)))
+(defun insertR* (new old lat)
+  "Inserts new to the right each occurance of old in lat."
+  (cond
+    ((null lat)
+     (format t "null!~%")
+     nil)
+    ((atom? (car lat))
+     (format t "atom! ~A~%" (car lat))
+     (cond
+       ((eqan (car lat) old)
+	(format t "found new in ~A!~%" lat)
+	(cons old (cons new (insertR* new old (cdr lat)))))
+       (t
+	(cons (car lat) (insertR* new old (cdr lat))))))
+    (t
+     (format t "new lat found: ~A~%" lat)
+     (cons (insertR* new old (car lat)) (insertR* new old (cdr lat))))))
+    
+       
+
+
+
+
+
+
+
+
+
