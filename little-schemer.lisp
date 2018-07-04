@@ -184,3 +184,54 @@
 	(cons (car lat) (subst* new old (cdr lat))))))
     (t
      (cons (subst* new old (car lat)) (subst* new old (cdr lat))))))
+
+(defun member* (a lat)
+  "Finds a in lat."
+  (cond
+    ((null lat) nil)
+    ((atom? (car lat))
+     (or (eqan (car lat) a)
+	 (member* a (cdr lat))))
+    (t
+     (or (member* a (cdr lat))
+	 (member* a (car lat))))))
+
+(defun leftmost (lat)
+  "Finds the leftmost atom in a list of lists."
+  (cond
+    ((null lat) nil)
+    ((atom? (car lat))
+     (car lat))
+    (t
+     (leftmost (car lat)))))
+	    
+(defun eqlist? (l1 l2)
+  (cond
+    ((and (null l1)
+	  (null l2))
+     t)
+    ((or (null l1)
+	 (null l2))
+     nil)
+    ((and (atom? (car l1))
+	  (atom? (car l2)))
+     (eqlist? (cdr l1)
+	      (cdr l2)))
+    ((or (atom? (car l1))
+	 (atom? (car l2)))
+     nil)
+    ((and (eqlist? (car l1) (car l2))
+	  (eqlist? (cdr l1) (cdr l2))))))
+
+(defun equal? (l1 l2)
+  (cond
+    ((and (atom? l1)
+	  (atom? l2))
+     (eqan l1 l2))
+    ((atom? l1)
+     nil)
+    ((atom? l2)
+     nil)
+    (t
+     (eqlist? l1 l2))))
+     
