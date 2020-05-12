@@ -235,3 +235,29 @@
     (t
      (eqlist? l1 l2))))
      
+(defun numbered? (aexp)
+  (cond
+    ((atom? aexp)
+     (numberp aexp))
+    ((eq (car (cdr aexp)) '+)
+     (and
+      (numbered? (car aexp))
+      (numbered? (car (cdr (cdr aexp))))))
+    ((eq (car (cdr aexp)) '^)
+     (and
+      (numbered? (car aexp))
+      (numbered? (car (cdr (cdr aexp))))))
+    ((eq (car (cdr aexp)) '*)
+     (and
+      (numbered? (car aexp))
+      (numbered? (car (cdr (cdr aexp))))))))
+
+;; if we assume that aexp is an aexp, we can simplify:
+(defun numbered2? (aexp)
+  (cond
+    ((atom? aexp)
+     (numberp aexp))
+    (t
+     (and
+      (numbered2? aexp)
+      (numbered2? (car (cdr (cdr aexp))))))))
